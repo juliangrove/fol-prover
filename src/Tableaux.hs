@@ -11,15 +11,15 @@ type PropositionalRule = Signed -> [[Signed]]
 type QuantifierRule = [Signed] -> Signed -> [Signed]
 
 andRule, orRule, notRule :: PropositionalRule
-andRule (And f0 f1, True) = [[(f0, True), (f1, True)]]
-andRule (And f0 f1, False) = [[(f0, False)], [(f1, False)]]
-andRule f = [[f]]
-orRule (Or f0 f1, True) = [[(f0, True)], [(f1, True)]]
-orRule (Or f0 f1, False) = [[(f0, False), (f1, False)]]
-orRule f =[[f]]
-notRule (Not f, True) = [[(f, False)]]
-notRule (Not f, False) = [[(f, True)]]
-notRule f = [[f]]
+andRule sf@(And f0 f1, True) = [[(f0, True), (f1, True), sf]]
+andRule sf@(And f0 f1, False) = [[(f0, False)], [(f1, False), sf]]
+andRule sf = [[sf]]
+orRule sf@(Or f0 f1, True) = [[(f0, True), sf], [(f1, True), sf]]
+orRule sf@(Or f0 f1, False) = [[(f0, False), (f1, False), sf]]
+orRule sf = [[sf]]
+notRule sf@(Not f, True) = [[(f, False), sf]]
+notRule sf@(Not f, False) = [[(f, True), sf]]
+notRule sf = [[sf]]
 
 deltaRule, gammaRule :: QuantifierRule
 deltaRule fs sf = case sf of
@@ -79,6 +79,3 @@ loop tableau = do
       if contradictory newFs
       then pure Nothing
       else pure (Just newFs)
-
-
-trueThing = [(Or (Not (Exists (Var 0) (Forall (Var 1) (Pred 0 [V (Var 0), V (Var 1)])))) (Forall (Var 1) (Exists (Var 0) (Pred 0 [V (Var 0), V (Var 1)]))), False)]
