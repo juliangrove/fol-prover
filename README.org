@@ -1,2 +1,2 @@
 * fol-prover
-  messing around
+  Sound, complete (I think), extremely inefficient FOL prover.
