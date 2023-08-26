@@ -13,12 +13,10 @@ entails n fs f = depth n $ (f, False) : map (, True) fs
 
 -- | Messing around:
 
-transitivity = Forall (Var 0) (Forall (Var 1) (Forall (Var 2) (Or (Not (And (Pred 0 [V (Var 0), V (Var 1)]) (Pred 0 [V (Var 1), V (Var 2)]))) (Pred 0 [V (Var 0), V (Var 2)]))))
+imp f0 f1 = Or (Not f0) f1
+see a b = Pred 0 [a, b]
+animate a = Pred 1 [a]
+seeAnimate = Forall (Var 0) (Forall (Var 1) (see (V (Var 0)) (V (Var 1)) `imp` animate (V (Var 1))))
 
-hyp n0 n1 = Pred 0 [N n0, N n1]
-
-hyp1 = hyp (Name 0) (Name 1)
-hyp2 = hyp (Name 1) (Name 2)
-hyp3 = hyp (Name 2) (Name 3)
-hyp4 = hyp (Name 0) (Name 2)
-
+-- >>> entails 4 [see (N (Name 0)) (N (Name 1)), seeAnimate] (animate (N (Name 1)))
+-- True

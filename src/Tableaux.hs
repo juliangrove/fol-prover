@@ -12,7 +12,7 @@ type QuantifierRule = [Signed] -> Signed -> [Signed]
 
 andRule, orRule, notRule :: PropositionalRule
 andRule sf@(And f0 f1, True) = [[(f0, True), (f1, True), sf]]
-andRule sf@(And f0 f1, False) = [[(f0, False)], [(f1, False), sf]]
+andRule sf@(And f0 f1, False) = [[(f0, False), sf], [(f1, False), sf]]
 andRule sf = [[sf]]
 orRule sf@(Or f0 f1, True) = [[(f0, True), sf], [(f1, True), sf]]
 orRule sf@(Or f0 f1, False) = [[(f0, False), (f1, False), sf]]
