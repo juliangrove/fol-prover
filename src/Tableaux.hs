@@ -21,8 +21,8 @@ notRule sf@(Not f, True) = [[(f, False), sf]]
 notRule sf@(Not f, False) = [[(f, True), sf]]
 notRule sf = [[sf]]
 
-deltaRule, gammaRule :: QuantifierRule
-deltaRule fs sf = case sf of
+gammaRule, deltaRule :: QuantifierRule
+gammaRule fs sf = case sf of
   (Forall v f0, True) -> [(subst v (N (nameT v f0)) f0, True), sf]
   (Exists v f0, False) -> [(subst v (N (nameF v f0)) f0, False), sf]
   _ -> [sf]
@@ -34,7 +34,7 @@ deltaRule fs sf = case sf of
           where name i = if (subst v (N (Name i)) f0, False) `elem` fs
                            then name (i + 1)
                            else Name i
-gammaRule fs = \case
+deltaRule fs = \case
   (Exists v f0, True) -> [(subst v (N name) f0, True)]
   (Forall v f0, False) -> [(subst v (N name) f0, False)]
   sf -> [sf]
@@ -61,8 +61,8 @@ allRules :: [Signed] -> [[Signed]]
 allRules fs = do fs <- applyRule orRule fs
                  fs <- applyRule andRule fs
                  fs <- applyRule notRule fs
-                 fs <- pure (applyQuantRule deltaRule fs)
                  fs <- pure (applyQuantRule gammaRule fs)
+                 fs <- pure (applyQuantRule deltaRule fs)
                  pure fs
 
 contradictory :: [Signed] -> Bool
