@@ -4,8 +4,6 @@ data Var = Var Integer deriving (Eq, Ord, Show)
 data Name = Name Integer deriving (Eq, Ord, Show)
 data Term = V Var | N Name deriving (Eq, Show)
 data Formula = Pred Integer [Term]
-             | Top
-             | Bot
              | And Formula Formula
              | Or Formula Formula
              | Not Formula
@@ -13,8 +11,6 @@ data Formula = Pred Integer [Term]
              | Exists Var Formula deriving (Show)
 
 instance Eq Formula where
-  Top == Top = True
-  Bot == Bot = True
   And a b == And c d = a == c && b == d
   Or a b == Or c d = a == c && b == d
   Not f0 == Not f1 = f0 == f1
@@ -42,14 +38,12 @@ instance Properties Formula where
   fv (Not f) = fv f
   fv (Forall v f) = filter (/= v) $ fv f
   fv (Exists v f) = filter (/= v) $ fv f
-  fv _ = []
   names (Pred _ ts) = concatMap names ts
   names (And f0 f1) = names f0 ++ names f1
   names (Or f0 f1) = names f0 ++ names f1
   names (Not f) = names f
   names (Forall v f) = names f
   names (Exists v f) = names f
-  names _ = []
   
 fresh :: [Var] -> Var
 fresh vs = Var (n + 1)
@@ -81,4 +75,3 @@ instance Subst Formula where
     where vnew = fresh $ v0 : fv f
           fnew = subst v1 (V vnew) f
   subst v t (Exists v0 f) = Exists v0 $ subst v t f
-  subst v t f = f

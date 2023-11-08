@@ -18,5 +18,6 @@ see a b = Pred 0 [a, b]
 animate a = Pred 1 [a]
 seeAnimate = Forall (Var 1) ((Exists (Var 0) (see (V (Var 0)) (V (Var 1)))) `imp` animate (V (Var 1)))
 
--- >>> entails 3 [see (N (Name 0)) (N (Name 1)), seeAnimate] (animate (N (Name 1)))
--- True
+
+-- >>> length $ loop $ loop $ loop $ loop $ loop $ loop $ loop [Just (map (\x -> (x, True)) [see (N (Name 0)) (N (Name 1)), seeAnimate] ++ [((animate (N (Name 0))), False)])]
+-- 4322

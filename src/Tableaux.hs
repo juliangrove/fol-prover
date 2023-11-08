@@ -44,9 +44,8 @@ deltaRule fs = \case
                    where Name i = maximum ns
 
 applyRule :: Rule -> [Signed] -> [[Signed]]
-applyRule rule p = applyRule' rule p [[(Top, True)]]
+applyRule rule p = applyRule' rule p [[]]
   where applyRule' _ [] t = t
-        applyRule' _ [(Top, True)] t = t
         applyRule' rule (f:fs) t = applyRule' rule fs t'
           where t' = do p <- t
                         b <- rule (f:p ++ fs) f
