@@ -51,7 +51,7 @@ applyRule rule p = applyRule' rule p [[]]
   where applyRule' _ [] t = t
         applyRule' rule (f:fs) t = applyRule' rule fs t'
           where t' = do p <- t
-                        b <- rule (f:p ++ fs) f
+                        b <- rule (f:fs ++ p) f
                         pure (p ++ b)
 
 allRules :: Path -> [Path]
@@ -60,7 +60,7 @@ allRules p = do p0 <- applyRule (const andRule) p
                 p2 <- applyRule (const notRule) p1
                 p3 <- applyRule gammaRule p2
                 p4 <- applyRule deltaRule p3
-                return p4
+                pure p4
 
 contradictory :: [SignedForm] -> Bool
 contradictory [] = False

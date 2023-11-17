@@ -21,3 +21,4 @@ seeAnimate = Forall (Var 1) ((Exists (Var 0) (see (V (Var 0)) (V (Var 1)))) `imp
 
 -- >>> entails 3 [seeAnimate, see (N (Name 0)) (N (Name 1))] (animate (N (Name 1)))
 -- True
+
